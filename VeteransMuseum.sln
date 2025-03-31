@@ -1,0 +1,21 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VeteransMuseum.Domain", "VeteransMuseum.Domain\VeteransMuseum.Domain.csproj", "{09E3B6EC-7615-4742-AF36-EE2ECB53B9B6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2FADE1BD-E2F4-438E-9294-B3A6C1BD3CD0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{09E3B6EC-7615-4742-AF36-EE2ECB53B9B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09E3B6EC-7615-4742-AF36-EE2ECB53B9B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09E3B6EC-7615-4742-AF36-EE2ECB53B9B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09E3B6EC-7615-4742-AF36-EE2ECB53B9B6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{09E3B6EC-7615-4742-AF36-EE2ECB53B9B6} = {2FADE1BD-E2F4-438E-9294-B3A6C1BD3CD0}
+	EndGlobalSection
+EndGlobal
