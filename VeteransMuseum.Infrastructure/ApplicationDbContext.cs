@@ -12,4 +12,10 @@ public sealed class ApplicationDbContext : DbContext
     {
         _dateTimeProvider = dateTimeProvider;
     }
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        base.OnModelCreating(modelBuilder);
+    }
 }
