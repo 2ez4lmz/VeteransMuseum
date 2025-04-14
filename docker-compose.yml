@@ -1,0 +1,32 @@
+services:
+  veteransmuseum.webapi:
+    image: ${DOCKER_REGISTRY-}veteransmuseumwebapi
+    container_name: VeteransMuseum.WebApi
+    build:
+      context: .
+      dockerfile: VeteransMuseum.WebApi/Dockerfile
+    depends_on:
+      - veteransmuseum-db
+
+  veteransmuseum-db:
+    image: postgres:latest
+    container_name: VeteransMuseum.Db
+    environment:
+      - POSTGRES_DB=veteransmuseum
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - ./.containers/database:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  bookify-seq:
+    image: datalust/seq:latest
+    container_name: VeteransMuseum.Seq
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - 5341:5341
+      - 8081:80
+    
