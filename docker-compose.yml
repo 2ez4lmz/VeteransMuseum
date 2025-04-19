@@ -20,8 +20,21 @@ services:
       - ./.containers/database:/var/lib/postgresql/data
     ports:
       - "5433:5432"
+        
+  veteransmuseum-idp:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: VeteransMuseum.Identity
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    volumes:
+      - ./.containers/identity:/opt/keycloak/data
+      - ./.files/bookify-realm-export.json:/opt/keycloak/data/import/bookify-realm-export.json
+    ports:
+      - 18080:8080
+    command: start-dev --import-realm
 
-  bookify-seq:
+  veteransmuseum-seq:
     image: datalust/seq:latest
     container_name: VeteransMuseum.Seq
     environment:
