@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +10,7 @@ using VeteransMuseum.Application.Abstractions.Data;
 using VeteransMuseum.Domain.Abstractions;
 using VeteransMuseum.Domain.Users;
 using VeteransMuseum.Infrastructure.Authentication;
+using VeteransMuseum.Infrastructure.Authorization;
 using VeteransMuseum.Infrastructure.Clock;
 using VeteransMuseum.Infrastructure.Data;
 using VeteransMuseum.Infrastructure.Repositories;
@@ -29,6 +31,8 @@ public static class DependencyInjection
         AddPersistence(services, configuration);
  
         AddAuthentication(services, configuration);
+        
+        AddAuthorization(services);
 
         return services;
     }
@@ -65,6 +69,13 @@ public static class DependencyInjection
         services.AddHttpContextAccessor();
  
         services.AddScoped<IUserContext, UserContext>();
+    }
+    
+    private static void AddAuthorization(IServiceCollection services)
+    {
+        services.AddScoped<AuthorizationService>();
+ 
+        services.AddTransient<IClaimsTransformation, CustomClaimsTransformation>();
     }
 
     private static void AddPersistence(IServiceCollection services, IConfiguration configuration)

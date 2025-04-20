@@ -18,8 +18,4 @@
       <ProjectReference Include="..\VeteransMuseum.Application\VeteransMuseum.Application.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\VeteransMuseum.Application\VeteransMuseum.Application.csproj" />
-    </ItemGroup>
-
 </Project>
