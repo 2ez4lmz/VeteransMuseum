@@ -2,10 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using VeteransMuseum.Application.Abstractions.Clock;
 using VeteransMuseum.Application.Exceptions;
+using VeteransMuseum.Domain.Abstractions;
 
 namespace VeteransMuseum.Infrastructure;
 
-public sealed class ApplicationDbContext : DbContext
+public sealed class ApplicationDbContext : DbContext, IUnitOfWork
 {
     private readonly IPublisher _publisher;
     

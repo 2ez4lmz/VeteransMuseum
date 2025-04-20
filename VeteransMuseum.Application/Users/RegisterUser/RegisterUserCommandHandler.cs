@@ -5,7 +5,7 @@ using VeteransMuseum.Domain.Users;
 
 namespace VeteransMuseum.Application.Users.RegisterUser;
 
-public sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, Guid>
+internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, Guid>
 {
     private readonly IAuthenticationService _authenticationService;
     private readonly IUserRepository _userRepository;
@@ -30,7 +30,7 @@ public sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserCom
             new LastName(request.LastName),
             new Email(request.Email));
  
-        var identityId = await _authenticationService.RegisterAsync(
+        string identityId = await _authenticationService.RegisterAsync(
             user,
             request.Password,
             cancellationToken);
@@ -39,7 +39,7 @@ public sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserCom
          
         _userRepository.Add(user);
  
-        await _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
  
         return user.Id;
     }

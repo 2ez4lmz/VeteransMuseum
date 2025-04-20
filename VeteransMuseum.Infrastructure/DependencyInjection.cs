@@ -2,11 +2,18 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using VeteransMuseum.Application.Abstractions.Clock;
 using VeteransMuseum.Application.Abstractions.Data;
+using VeteransMuseum.Domain.Abstractions;
+using VeteransMuseum.Domain.Users;
 using VeteransMuseum.Infrastructure.Authentication;
 using VeteransMuseum.Infrastructure.Clock;
 using VeteransMuseum.Infrastructure.Data;
+using VeteransMuseum.Infrastructure.Repositories;
+using AuthenticationOptions = VeteransMuseum.Infrastructure.Authentication.AuthenticationOptions;
+using AuthenticationService = VeteransMuseum.Infrastructure.Authentication.AuthenticationService;
+using IAuthenticationService = VeteransMuseum.Application.Abstractions.Authentication.IAuthenticationService;
 
 namespace VeteransMuseum.Infrastructure;
 
@@ -18,6 +25,38 @@ public static class DependencyInjection
     {
         services.AddTransient<IDateTimeProvider, DateTimeProvider>();
         
+        AddPersistence(services, configuration);
+ 
+        AddAuthentication(services, configuration);
+
+        return services;
+    }
+
+    private static void AddAuthentication(IServiceCollection services, IConfiguration configuration)
+    {
+        services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer();
+        
+        services.Configure<AuthenticationOptions>(configuration.GetSection("Authentication"));
+ 
+        services.ConfigureOptions<JwtBearerOptionsSetup>();
+        
+        services.Configure<KeycloakOptions>(configuration.GetSection("Keycloak"));
+ 
+        services.AddTransient<AdminAuthorizationDelegatingHandler>();
+         
+        services.AddHttpClient<IAuthenticationService, AuthenticationService>((serviceProvider, httpClient) =>
+            {
+                KeycloakOptions keycloakOptions = serviceProvider.GetRequiredService<IOptions<KeycloakOptions>>().Value;
+ 
+                httpClient.BaseAddress = new Uri(keycloakOptions.AdminUrl);
+            })
+            .AddHttpMessageHandler<AdminAuthorizationDelegatingHandler>();
+    }
+
+    private static void AddPersistence(IServiceCollection services, IConfiguration configuration)
+    {
         var connectionString =
             configuration.GetConnectionString("Database") ??
             throw new ArgumentNullException(nameof(configuration));
@@ -27,17 +66,11 @@ public static class DependencyInjection
             options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention();
         });
         
+        services.AddScoped<IUserRepository, UserRepository>();
+        
+        services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
+        
         services.AddSingleton<ISqlConnectionFactory>(_ =>
             new SqlConnectionFactory(connectionString));
- 
-        services
-            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer();
- 
-        services.Configure<AuthenticationOptions>(configuration.GetSection("Authentication"));
- 
-        services.ConfigureOptions<JwtBearerOptionsSetup>();
-
-        return services;
     }
 }
