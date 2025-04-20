@@ -1,21 +1,37 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using VeteransMuseum.Application.Abstractions.Clock;
+using VeteransMuseum.Application.Exceptions;
 
 namespace VeteransMuseum.Infrastructure;
 
 public sealed class ApplicationDbContext : DbContext
 {
-    private readonly IDateTimeProvider _dateTimeProvider;
+    private readonly IPublisher _publisher;
     
-    public ApplicationDbContext(DbContextOptions options, IDateTimeProvider dateTimeProvider)
+    public ApplicationDbContext(DbContextOptions options, IPublisher publisher)
         : base(options)
     {
-        _dateTimeProvider = dateTimeProvider;
+        _publisher = publisher;
     }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         base.OnModelCreating(modelBuilder);
+    }
+
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var result = await base.SaveChangesAsync(cancellationToken);
+
+            return result;
+        }
+        catch (DbUpdateConcurrencyException ex)
+        {
+            throw new ConcurrencyException("Concurrency exception occured.", ex);
+        }
     }
 }
