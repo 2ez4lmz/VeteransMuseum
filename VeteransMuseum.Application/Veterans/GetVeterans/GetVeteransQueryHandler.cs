@@ -18,7 +18,26 @@ public class GetVeteransQueryHandler : IQueryHandler<GetVeteransQuery, IReadOnly
     {
         using var connection = _sqlConnectionFactory.CreateConnection();
 
-        const string sql = @"";
+        const string sql = """
+           SELECT
+               id AS Id,
+               first_name AS FirstName,
+               last_name AS LastName,
+               middle_name AS MiddleName,
+               birth_date AS BirthDate,
+               death_date AS DeathDate,
+               biography AS Biography,
+               rank AS Rank,
+               awards AS Awards,
+               military_unit AS MilitaryUnit,
+               battles AS Battles,
+               image_url AS ImageUrl,
+               created_at AS CreatedAt,
+               created_by AS CreatedBy,
+               updated_at AS UpdatedAt,
+               updated_by AS UpdatedBy
+           FROM veterans
+           """;
 
         var veterans = await connection.QueryAsync<VeteranResponse>(sql);
 
