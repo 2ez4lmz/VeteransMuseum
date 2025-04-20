@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using VeteransMuseum.Application.Abstractions.Authentication;
 using VeteransMuseum.Application.Abstractions.Clock;
 using VeteransMuseum.Application.Abstractions.Data;
 using VeteransMuseum.Domain.Abstractions;
@@ -53,6 +54,13 @@ public static class DependencyInjection
                 httpClient.BaseAddress = new Uri(keycloakOptions.AdminUrl);
             })
             .AddHttpMessageHandler<AdminAuthorizationDelegatingHandler>();
+        
+        services.AddHttpClient<IJwtService, JwtService>((serviceProvider, httpClient) =>
+            {
+                KeycloakOptions keycloakOptions = serviceProvider.GetRequiredService<IOptions<KeycloakOptions>>().Value;
+     
+                httpClient.BaseAddress = new Uri(keycloakOptions.TokenUrl);
+            });
     }
 
     private static void AddPersistence(IServiceCollection services, IConfiguration configuration)
