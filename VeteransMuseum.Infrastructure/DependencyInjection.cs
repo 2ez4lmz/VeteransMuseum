@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using VeteransMuseum.Application.Abstractions.Clock;
 using VeteransMuseum.Application.Abstractions.Data;
+using VeteransMuseum.Infrastructure.Authentication;
 using VeteransMuseum.Infrastructure.Clock;
 using VeteransMuseum.Infrastructure.Data;
 
@@ -27,6 +29,14 @@ public static class DependencyInjection
         
         services.AddSingleton<ISqlConnectionFactory>(_ =>
             new SqlConnectionFactory(connectionString));
+ 
+        services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer();
+ 
+        services.Configure<AuthenticationOptions>(configuration.GetSection("Authentication"));
+ 
+        services.ConfigureOptions<JwtBearerOptionsSetup>();
 
         return services;
     }
