@@ -1,8 +1,10 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using VeteransMuseum.Application.Users.GetLoggedInUser;
 using VeteransMuseum.Application.Users.LogInUser;
 using VeteransMuseum.Application.Users.RegisterUser;
+using VeteransMuseum.Domain.Abstractions;
 
 namespace VeteransMuseum.WebApi.Controllers.Users;
 
@@ -53,6 +55,16 @@ public class UsersController : ControllerBase
         {
             return Unauthorized(result.Error);
         }
+ 
+        return Ok(result.Value);
+    }
+    
+    [HttpGet("me")]
+    public async Task<IActionResult> GetLoggedInUser(CancellationToken cancellationToken)
+    {
+        var query = new GetLoggedInUserQuery();
+ 
+        Result<UserResponse> result = await _sender.Send(query, cancellationToken);
  
         return Ok(result.Value);
     }
