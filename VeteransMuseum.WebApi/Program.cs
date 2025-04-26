@@ -16,7 +16,19 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173") // Укажите адрес вашего фронтенда
+            .AllowAnyMethod() // Разрешаем все HTTP-методы (GET, POST и т.д.)
+            .AllowAnyHeader(); // Разрешаем любые заголовки
+    });
+});
+
 var app = builder.Build();
+
+app.UseCors("AllowFrontend");
 
 if (app.Environment.IsDevelopment())
 {
@@ -39,6 +51,8 @@ app.UseCustomExceptionHandler();
 app.UseAuthentication();
  
 app.UseAuthorization();
+
+app.UseRouting();
 
 app.MapControllers();
 
