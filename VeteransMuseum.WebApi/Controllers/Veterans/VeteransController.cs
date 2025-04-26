@@ -50,7 +50,16 @@ public class VeteransController : ControllerBase
         var command = new AddVeteranCommand(
             request.FirstName,
             request.LastName,
-            request.MiddleName);
+            request.MiddleName,
+            request.BirthDate,
+            request.DeathDate,
+            request.Biography,
+            request.Rank,
+            request.Awards,
+            request.MilitaryUnit,
+            request.Battles,
+            request.ImageUrl
+            );
  
         var result = await _sender.Send(command, cancellationToken);
  

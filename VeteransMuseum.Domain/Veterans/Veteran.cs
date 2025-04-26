@@ -72,4 +72,41 @@ public class Veteran : Entity, IAuditable
     public DateTime? UpdatedAt { get; set; }
     
     public long? UpdatedBy { get; set; }
+
+    public static Veteran Add(
+        FirstName firstName,
+        LastName lastName,
+        MiddleName middleName,
+        DateTime? birthDate,
+        DateTime? deathDate,
+        Biography biography,
+        Rank rank,
+        Award awards,
+        MilitaryUnit militaryUnit,
+        Battle battles,
+        ImageUrl? imageUrl,
+        DateTime utcNow)
+    {
+        var veteran = new Veteran
+        {
+            Id = Guid.NewGuid(),
+            FirstName = firstName,
+            LastName = lastName,
+            MiddleName = middleName,
+            BirthDate = birthDate,
+            DeathDate = deathDate,
+            Biography = biography,
+            Rank = rank,
+            Awards = awards,
+            MilitaryUnit = militaryUnit,
+            Battles = battles,
+            ImageUrl = imageUrl,
+            CreatedAt = utcNow,
+            CreatedBy = 0, // Укажите ID пользователя, если есть контекст
+            UpdatedAt = null,
+            UpdatedBy = null
+        };
+        
+        return veteran;
+    }
 }
