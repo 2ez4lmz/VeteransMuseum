@@ -42,7 +42,7 @@ public class VeteransController : ControllerBase
     }
     
     [HttpPost]
-    [Authorize(Roles = Roles.Admin)]
+    //[Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> CreateVeteran(
         AddVeteranRequest request,
         CancellationToken cancellationToken)

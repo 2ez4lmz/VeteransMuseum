@@ -14,10 +14,11 @@ public class AddVeteranCommandHandler : ICommandHandler<AddVeteranCommand, Guid>
  
     public AddVeteranCommandHandler(
         IUnitOfWork unitOfWork, 
-        IVeteranRepository veteranRepository)
+        IVeteranRepository veteranRepository, IDateTimeProvider dateTimeProvider)
     {
         _unitOfWork = unitOfWork;
         _veteranRepository = veteranRepository;
+        _dateTimeProvider = dateTimeProvider;
     }
  
     public async Task<Result<Guid>> Handle(
