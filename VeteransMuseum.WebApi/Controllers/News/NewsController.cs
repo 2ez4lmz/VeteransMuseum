@@ -1,8 +1,11 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using VeteransMuseum.Application.News.AddNews;
+using VeteransMuseum.Application.News.DeleteNews;
 using VeteransMuseum.Application.News.GetNews;
 using VeteransMuseum.Application.News.GetNewsById;
+using VeteransMuseum.Application.News.UpdateNews;
 using VeteransMuseum.Domain.Abstractions;
 
 namespace VeteransMuseum.WebApi.Controllers.News;
@@ -40,33 +43,65 @@ public class NewsController : ControllerBase
         return Ok(result.Value);
     }
     
-    // [HttpPost]
-    // [Authorize(Roles = Roles.Admin)]
-    // public async Task<IActionResult> CreateNews(
-    //     AddVeteranRequest request,
-    //     CancellationToken cancellationToken)
-    // {
-    //     var command = new AddVeteranCommand(
-    //         request.FirstName,
-    //         request.LastName,
-    //         request.MiddleName,
-    //         request.BirthDate,
-    //         request.DeathDate,
-    //         request.Biography,
-    //         request.Rank,
-    //         request.Awards,
-    //         request.MilitaryUnit,
-    //         request.Battles,
-    //         request.ImageUrl
-    //         );
-    //
-    //     var result = await _sender.Send(command, cancellationToken);
-    //
-    //     if (result.IsFailure)
-    //     {
-    //         return BadRequest(result.Error);
-    //     }
-    //          
-    //     return Ok(result.Value);
-    // }
+    [HttpPost]
+    //[Authorize(Roles = Roles.Admin)]
+    public async Task<IActionResult> CreateNews(
+        AddNewsRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = new AddNewsCommand(
+            request.Title,
+            request.Content,
+            request.ImageUrl);
+
+        var result = await _sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [HttpPut("{id}")]
+    //[Authorize(Roles = Roles.Admin)]
+    public async Task<IActionResult> UpdateNews(
+        Guid id,
+        UpdateNewsRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = new UpdateNewsCommand(
+            id,
+            request.Title,
+            request.Content,
+            request.ImageUrl);
+
+        var result = await _sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok();
+    }
+
+    [HttpDelete("{id}")]
+    //[Authorize(Roles = Roles.Admin)]
+    public async Task<IActionResult> DeleteNews(
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        var command = new DeleteNewsCommand(id);
+
+        var result = await _sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return NoContent();
+    }
 }

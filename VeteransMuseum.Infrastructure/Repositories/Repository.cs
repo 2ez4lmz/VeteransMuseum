@@ -26,4 +26,20 @@ internal abstract class Repository<T>
     {
         DbContext.Add(entity);
     }
+    
+    public async Task UpdateAsync(T entity, CancellationToken cancellationToken = default)
+    {
+        DbContext.Update(entity);
+        await DbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var entity = await GetByIdAsync(id, cancellationToken);
+        if (entity != null)
+        {
+            DbContext.Remove(entity);
+            await DbContext.SaveChangesAsync(cancellationToken);
+        }
+    }
 }

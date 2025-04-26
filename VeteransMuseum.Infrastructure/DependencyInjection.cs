@@ -8,6 +8,7 @@ using VeteransMuseum.Application.Abstractions.Authentication;
 using VeteransMuseum.Application.Abstractions.Clock;
 using VeteransMuseum.Application.Abstractions.Data;
 using VeteransMuseum.Domain.Abstractions;
+using VeteransMuseum.Domain.News;
 using VeteransMuseum.Domain.Users;
 using VeteransMuseum.Domain.Veterans;
 using VeteransMuseum.Infrastructure.Authentication;
@@ -91,7 +92,10 @@ public static class DependencyInjection
         });
         
         services.AddScoped<IUserRepository, UserRepository>();
+        
         services.AddScoped<IVeteranRepository, VeteranRepository>();
+        
+        services.AddScoped<INewsRepository, NewsRepository>();
         
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
         

@@ -109,4 +109,41 @@ public class Veteran : Entity, IAuditable
         
         return veteran;
     }
+    
+    public void Update(
+        FirstName? firstName = null,
+        LastName? lastName = null,
+        MiddleName? middleName = null,
+        DateTime? birthDate = null,
+        DateTime? deathDate = null,
+        Biography? biography = null,
+        Rank? rank = null,
+        Award? awards = null,
+        MilitaryUnit? militaryUnit = null,
+        Battle? battles = null,
+        ImageUrl? imageUrl = null,
+        DateTime? utcNow = null,
+        long? updatedBy = null)
+    {
+        FirstName = firstName ?? FirstName;
+        LastName = lastName ?? LastName;
+        MiddleName = middleName ?? MiddleName;
+        BirthDate = birthDate ?? BirthDate;
+        DeathDate = deathDate ?? DeathDate;
+        Biography = biography ?? Biography;
+        Rank = rank ?? Rank;
+        Awards = awards ?? Awards;
+        MilitaryUnit = militaryUnit ?? MilitaryUnit;
+        Battles = battles ?? Battles;
+        ImageUrl = imageUrl ?? ImageUrl;
+
+        if (firstName != null || lastName != null || middleName != null ||
+            birthDate != null || deathDate != null || biography != null ||
+            rank != null || awards != null || militaryUnit != null ||
+            battles != null || imageUrl != null)
+        {
+            UpdatedAt = utcNow ?? DateTime.UtcNow;
+            UpdatedBy = updatedBy ?? 0; // Replace with actual user ID if available
+        }
+    }
 }

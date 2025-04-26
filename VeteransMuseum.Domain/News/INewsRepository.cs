@@ -2,7 +2,7 @@ namespace VeteransMuseum.Domain.News;
 
 public interface INewsRepository
 {
-    Task<IEnumerable<News>> GetAllAsync(CancellationToken cancellationToken = default);
+    //Task<IEnumerable<News>> GetAllAsync(CancellationToken cancellationToken = default);
     
     Task<News?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     

@@ -6,9 +6,9 @@ public interface IVeteranRepository
     
     Task<Veteran?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     
-    // Task UpdateAsync(Veteran news, CancellationToken cancellationToken = default);
+    Task UpdateAsync(Veteran news, CancellationToken cancellationToken = default);
 
     void Add(Veteran news);
     
-    // Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+    Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 }
