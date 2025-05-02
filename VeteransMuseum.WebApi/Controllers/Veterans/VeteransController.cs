@@ -74,7 +74,7 @@ public class VeteransController : ControllerBase
     }
     
     [HttpPut("{id}")]
-    //[Authorize(Roles = Roles.Admin)]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> UpdateVeteran(
         Guid id,
         UpdateVeteranRequest request,
@@ -105,7 +105,7 @@ public class VeteransController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    //[Authorize(Roles = Roles.Admin)]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> DeleteVeteran(
         Guid id,
         CancellationToken cancellationToken)
